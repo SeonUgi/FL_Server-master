@@ -10,7 +10,7 @@ class FederatedServer:
     max_count = 2
     global_weight = None
     local_weights = []
-    global_estimation = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    global_estimation = None
     local_estimations = []
     current_count = 0
     current_round = 0
@@ -47,6 +47,9 @@ class FederatedServer:
             estimation_list.append(temp)
 
         cls.local_estimations.append(estimation_list)
+        if cls.current_count == cls.max_count:
+            cls.est()
+            cls.current_count = 0
 
     @classmethod
     def est(cls):
