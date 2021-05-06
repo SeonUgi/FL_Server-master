@@ -46,6 +46,7 @@ class FederatedServer:
             temp = np.array(local_estimations[i])
             estimation_list.append(temp)
 
+        cls.current_count += 1
         cls.local_estimations.append(estimation_list)
         if cls.current_count == cls.max_count:
             cls.est()
