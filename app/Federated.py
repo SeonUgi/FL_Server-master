@@ -7,10 +7,10 @@ logger = logging.getLogger(__name__)
 
 class FederatedServer:
     
-    max_count = 1
+    max_count = 2
     global_weight = None
     local_weights = []
-    global_estimation = None
+    global_estimation = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     local_estimations = []
     current_count = 0
     current_round = 0
