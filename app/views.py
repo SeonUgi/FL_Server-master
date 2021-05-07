@@ -53,6 +53,7 @@ def estimation(request):
     if request.method == 'GET':
         global_estimation = FederatedServer.get_est()
         global_estimation_to_json = json.dumps(global_estimation, cls=numpy_encoder.NumpyEncoder)
+        print(global_estimation_to_json)
         return HttpResponse(global_estimation_to_json, status.HTTP_200_OK)
 
     elif request.method == 'PUT':
