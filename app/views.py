@@ -41,8 +41,9 @@ def weight(request):
     elif request.method == 'PUT':
         #print("request PUT weight")
         json_data = JSONParser().parse(request)
-        if FederatedServer.get_client_count == FederatedServer.get_current_count:
-            FederatedServer.update(json_data)
+        print("current count : {}, client count : {}".format(FederatedServer.current_count, FederatedServer.max_count))
+        # if FederatedServer.max_count == FederatedServer.current_count:
+        FederatedServer.update(json_data)
         return HttpResponse("Request PUT OK", status.HTTP_200_OK)
 
     else :

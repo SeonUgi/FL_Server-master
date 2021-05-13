@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 class FederatedServer:
     
-    max_count = 3
+    max_count = 2
     global_weight = None
     local_weights = []
     global_estimation = None
@@ -33,8 +33,7 @@ class FederatedServer:
         #print("update count : {}, {}".format(cls.current_count, len(cls.local_weights)))
         if cls.current_count == cls.max_count:
             cls.avg()
-            cls.current_count = 0
-            
+            cls.current_count = 0     
             cls.current_round += 1
             logger.info("----------------------------------------")
             logger.info("current round : {}".format(cls.current_round))
