@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 class FederatedServer:
     
-    max_count = 5
+    max_count = 2
     global_weight = None
     local_weights = []
     global_estimation = None
@@ -49,7 +49,7 @@ class FederatedServer:
 
         cls.est_count += 1
         cls.local_estimations.append(estimation_list)
-        if cls.current_count == cls.max_count:
+        if cls.est_count == cls.max_count:
             cls.est()
             cls.est_count = 0
 
@@ -70,8 +70,9 @@ class FederatedServer:
                 temp = np.array(cls.local_estimations[i][j])
                 temp_list[j] += temp
 
-
+        
         cls.global_estimation = np.divide(temp_list, cls.max_count)
+        print(cls.global_estimation)
         cls.local_estimations = []  #   global weight average 이후 다음 라운드를 위해 이전의 local weight 리스트 초기화
 
     @classmethod
