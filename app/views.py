@@ -41,7 +41,8 @@ def weight(request):
     elif request.method == 'PUT':
         #print("request PUT weight")
         json_data = JSONParser().parse(request)
-        FederatedServer.update(json_data)
+        if FederatedServer.get_client_count == FederatedServer.get_current_count:
+            FederatedServer.update(json_data)
         return HttpResponse("Request PUT OK", status.HTTP_200_OK)
 
     else :
@@ -53,7 +54,7 @@ def estimation(request):
     if request.method == 'GET':
         global_estimation = FederatedServer.get_est()
         global_estimation_to_json = json.dumps(global_estimation, cls=numpy_encoder.NumpyEncoder)
-        print(global_estimation_to_json)
+        # print(global_estimation_to_json)
         return HttpResponse(global_estimation_to_json, status.HTTP_200_OK)
 
     elif request.method == 'PUT':

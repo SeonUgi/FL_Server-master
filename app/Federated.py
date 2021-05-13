@@ -13,6 +13,7 @@ class FederatedServer:
     global_estimation = None
     local_estimations = []
     current_count = 0
+    est_count = 0
     current_round = 0
 
     def __init__(self):
@@ -33,6 +34,7 @@ class FederatedServer:
         if cls.current_count == cls.max_count:
             cls.avg()
             cls.current_count = 0
+            
             cls.current_round += 1
             logger.info("----------------------------------------")
             logger.info("current round : {}".format(cls.current_round))
@@ -46,11 +48,11 @@ class FederatedServer:
             temp = np.array(local_estimations[i])
             estimation_list.append(temp)
 
-        cls.current_count += 1
+        cls.est_count += 1
         cls.local_estimations.append(estimation_list)
         if cls.current_count == cls.max_count:
             cls.est()
-            cls.current_count = 0
+            cls.est_count = 0
 
     @classmethod
     def est(cls):
@@ -126,4 +128,5 @@ class FederatedServer:
         cls.local_estimations = []
         cls.local_weights = []
         cls.current_count = 0
+        cls.est_count = 0
         cls.current_round = 0
