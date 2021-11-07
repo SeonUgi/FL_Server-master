@@ -32,7 +32,10 @@ class FederatedServer:
         
         #print("update count : {}, {}".format(cls.current_count, len(cls.local_weights)))
         if cls.current_count == cls.max_count:
-            cls.avg()
+
+            # Set Aggregation Algorithm
+            cls.aggregate()
+
             cls.current_count = 0     
             cls.current_round += 1
             logger.info("----------------------------------------")
@@ -76,28 +79,44 @@ class FederatedServer:
         cls.local_estimations = []  #   global weight average 이후 다음 라운드를 위해 이전의 local weight 리스트 초기화
 
     @classmethod
-    def avg(cls):
+    def aggregate(cls, algorithm="avg"):
         temp_list = []
 
-        temp_weight = cls.local_weights.pop()   #   weight의 shape를 모르므로, 하나를 꺼내어 사용
+        temp_weight = cls.local_weights.pop()  # weight의 shape를 모르므로, 하나를 꺼내어 사용
 
-        for i in range(len(temp_weight)):  #todo check layer 갯수
+        for i in range(len(temp_weight)):
             temp = np.array(temp_weight[i])
             temp_list.append(temp)
 
         temp_list = np.array(temp_list)
-        
-        for i in range(len(cls.local_weights)):
-            for j in range(len(cls.local_weights[i])):
-                temp = np.array(cls.local_weights[i][j])
-                temp_list[j] += temp
+
+        if algorithm=="avg":
+            # Fed AVG
+
+            # get sum of parameters
+            for i in range(len(cls.local_weights)):
+                for j in range(len(cls.local_weights[i])):
+                    temp = np.array(cls.local_weights[i][j])
+                    temp_list[j] += temp
+
+            cls.global_weight = np.divide(temp_list, cls.max_count)
+            cls.local_weights = []  # global weight average 이후 다음 라운드를 위해 이전의 local weight 리스트 초기화
+
+        elif algorithm=="sgd":
+            # Fed SGD
+
+            # get sum of parameters
+            for i in range(len(cls.local_weights)):
+                for j in range(len(cls.local_weights[i])):
+                    temp = np.array(cls.local_weights[i][j])
+                    temp_list[j] += temp
 
 
-        cls.global_weight = np.divide(temp_list, cls.max_count)
-        cls.local_weights = []  #   global weight average 이후 다음 라운드를 위해 이전의 local weight 리스트 초기화
+
+
 
     @classmethod
-    def get_avg(cls):
+    def get_weight(cls):
         return cls.global_weight
 
     @classmethod

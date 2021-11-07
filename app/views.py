@@ -34,7 +34,8 @@ def client_count(request, count = 1):
 @api_view(['GET', 'PUT'])
 def weight(request):
     if request.method == 'GET':
-        global_weight = FederatedServer.get_avg()
+
+        global_weight = FederatedServer.get_weight()
         global_weight_to_json = json.dumps(global_weight, cls=numpy_encoder.NumpyEncoder)
         return HttpResponse(global_weight_to_json, status.HTTP_200_OK)
 
