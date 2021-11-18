@@ -90,7 +90,7 @@ class FederatedServer:
 
         temp_list = np.array(temp_list)
 
-        if algorithm.eq("avg"):
+        if algorithm == "avg":
             # Fed AVG
 
             # get sum of parameters
@@ -102,7 +102,7 @@ class FederatedServer:
             cls.global_weight = np.divide(temp_list, cls.max_count)
             cls.local_weights = []  # global weight average 이후 다음 라운드를 위해 이전의 local weight 리스트 초기화
 
-        elif algorithm.eq("sgd"):
+        elif algorithm == "sgd":
             # Fed SGD
 
             # get sum of parameters
