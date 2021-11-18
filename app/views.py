@@ -10,20 +10,24 @@ from app import numpy_encoder
 from app.Federated import FederatedServer
 
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 @api_view(['GET'])
 def index(request):
     logger.info("request index")
     return HttpResponse("index ok", status.HTTP_200_OK)
 
+
 @api_view(['GET'])
 def round(request):
-    #logger.info("request round")
+    # logger.info("request round")
     return HttpResponse(FederatedServer.get_current_round(), status.HTTP_200_OK)
 
+
 @api_view(['GET', 'POST'])
-def client_count(request, count = 1):
+def client_count(request, count=1):
     if request.method == 'GET':
         return HttpResponse("client_count get OK : {}".format(FederatedServer.get_client_count()), status.HTTP_200_OK)
     elif request.method == 'POST':
@@ -40,16 +44,19 @@ def weight(request):
         return HttpResponse(global_weight_to_json, status.HTTP_200_OK)
 
     elif request.method == 'PUT':
-        #print("request PUT weight")
-        json_data = JSONParser().parse(request)
+        # print("request PUT weight")
+        json_dic = JSONParser().parse(request)
         print("current count : {}, client count : {}".format(FederatedServer.current_count, FederatedServer.max_count))
         # if FederatedServer.max_count == FederatedServer.current_count:
-        FederatedServer.update(json_data)
+        local_weight = json_dic.local_weight
+        agg_alg = json_dic.agg_algorithm
+        FederatedServer.update(local_weight, agg_alg)
         return HttpResponse("Request PUT OK", status.HTTP_200_OK)
 
-    else :
-        #print("request OTHER weight")
+    else:
+        # print("request OTHER weight")
         return HttpResponse("Request OK", status.HTTP_200_OK)
+
 
 @api_view(['GET', 'PUT'])
 def estimation(request):
@@ -60,19 +67,21 @@ def estimation(request):
         return HttpResponse(global_estimation_to_json, status.HTTP_200_OK)
 
     elif request.method == 'PUT':
-        #print("request PUT weight")
+        # print("request PUT weight")
         json_data = JSONParser().parse(request)
         FederatedServer.update_estimation(json_data)
         return HttpResponse("Request PUT OK", status.HTTP_200_OK)
 
-    else :
-        #print("request OTHER weight")
+    else:
+        # print("request OTHER weight")
         return HttpResponse("Request OK", status.HTTP_200_OK)
+
 
 @api_view(['POST'])
 def reset(request):
     FederatedServer.reset_parm()
     return HttpResponse("Reset OK", status.HTTP_200_OK)
+
 
 @api_view(['GET'])
 def all_params(request):

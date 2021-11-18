@@ -21,7 +21,7 @@ class FederatedServer:
 
     #Update weights, round, client_count
     @classmethod
-    def update(cls, local_weight):
+    def update(cls, local_weight, agg_alg):
         weight_list = []
         for i in range(len(local_weight)): #range(4):  #todo check layer 갯수
             temp = np.array(local_weight[i])
@@ -34,7 +34,7 @@ class FederatedServer:
         if cls.current_count == cls.max_count:
 
             # Set Aggregation Algorithm
-            cls.aggregate()
+            cls.aggregate(agg_alg)
 
             cls.current_count = 0     
             cls.current_round += 1
@@ -90,7 +90,7 @@ class FederatedServer:
 
         temp_list = np.array(temp_list)
 
-        if algorithm=="avg":
+        if algorithm.eq("avg"):
             # Fed AVG
 
             # get sum of parameters
@@ -102,7 +102,7 @@ class FederatedServer:
             cls.global_weight = np.divide(temp_list, cls.max_count)
             cls.local_weights = []  # global weight average 이후 다음 라운드를 위해 이전의 local weight 리스트 초기화
 
-        elif algorithm=="sgd":
+        elif algorithm.eq("sgd"):
             # Fed SGD
 
             # get sum of parameters
