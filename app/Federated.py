@@ -15,6 +15,8 @@ class FederatedServer:
     current_count = 0
     est_count = 0
     current_round = 0
+    current_epoch = 0
+    max_epoch = 5
 
     def __init__(self):
         print("Federated init")
@@ -22,6 +24,7 @@ class FederatedServer:
     #Update weights, round, client_count
     @classmethod
     def update(cls, local_weight, agg_alg):
+
         weight_list = []
         for i in range(len(local_weight)): #range(4):  #todo check layer 갯수
             temp = np.array(local_weight[i])
@@ -29,19 +32,26 @@ class FederatedServer:
 
         cls.current_count += 1
         cls.local_weights.append(weight_list)
-        
+
         #print("update count : {}, {}".format(cls.current_count, len(cls.local_weights)))
+
         if cls.current_count == cls.max_count:
+            cls.current_count = 0
 
             # Set Aggregation Algorithm
             cls.aggregate(agg_alg)
+            if agg_alg == "avg":
+                cls.current_round += 1
+                logger.info("----------------------------------------")
+                logger.info("current round : {}".format(cls.current_round))
+                logger.info("----------------------------------------")
 
-            cls.current_count = 0     
-            cls.current_round += 1
-            logger.info("----------------------------------------")
-            logger.info("current round : {}".format(cls.current_round))
-            logger.info("----------------------------------------")
-
+            elif agg_alg == "sgd":
+                cls.current_epoch += 1
+                cls.aggregate(agg_alg)
+                logger.info("current epoch : {} / {}".format(cls.current_epoch, cls.max_epoch))
+                if cls.current_epoch == cls.max_epoch:
+                    cls.current_round += 1
     # Update statistical estimation
     @classmethod
     def update_estimation(cls, local_estimations):
@@ -111,9 +121,8 @@ class FederatedServer:
                     temp = np.array(cls.local_weights[i][j])
                     temp_list[j] += temp
 
-
-
-
+            cls.global_weight = np.divide(temp_list, cls.max_count)
+            cls.local_weights = []  # global weight average 이후 다음 라운드를 위해 이전의 local weight 리스트 초기화
 
     @classmethod
     def get_weight(cls):
@@ -140,6 +149,10 @@ class FederatedServer:
         return cls.max_count
 
     @classmethod
+    def get_current_epoch(cls):
+        return cls.current_epoch
+
+    @classmethod
     def reset_parm(cls):
         cls.max_count = 3
         cls.global_weight = None
@@ -149,3 +162,4 @@ class FederatedServer:
         cls.current_count = 0
         cls.est_count = 0
         cls.current_round = 0
+        cls.current_epoch = 0
