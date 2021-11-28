@@ -23,6 +23,7 @@ urlpatterns = [
     path('index', views.index),
     path('admin/', admin.site.urls),
     path('round', views.round),
+    path('epoch', views.epoch),
     path('client_count', views.client_count),
     path('client_count/', views.client_count),
     path('client_count/<int:count>', views.client_count),

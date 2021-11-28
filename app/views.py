@@ -26,6 +26,12 @@ def round(request):
     return HttpResponse(FederatedServer.get_current_round(), status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+def epoch(request):
+    # logger.info("request epoch")
+    return HttpResponse(FederatedServer.get_current_epoch(), status.HTTP_200_OK)
+
+
 @api_view(['GET', 'POST'])
 def client_count(request, count=1):
     if request.method == 'GET':
