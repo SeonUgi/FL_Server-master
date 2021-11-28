@@ -139,7 +139,10 @@ class FederatedServer:
 
         elif algorithm == 'topk':
             top = 3
-            temp = pd.Series(cls.local_accs)
+            temp = []
+            for i in cls.local_accs:
+                temp = temp.append(float(i))
+            temp = pd.Series(temp)
             i = temp.nlargest(top)
             index = i.index.values.tolist()
             for i in index:
