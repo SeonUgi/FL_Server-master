@@ -147,7 +147,7 @@ class FederatedServer:
             i = temp.nlargest(top)
             index = i.index.values.tolist()
             for i in index:
-                for j in range(len(cls.local_weights[i])):
+                for j in range(len(cls.local_weights[i-1])):
                     temp = np.array(cls.local_weights[i][j])
                     temp_list[j] += temp
 
