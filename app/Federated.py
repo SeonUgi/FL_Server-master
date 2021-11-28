@@ -16,7 +16,7 @@ class FederatedServer:
     est_count = 0
     current_round = 0
     current_epoch = 0
-    max_epoch = 5
+    max_epoch = 2
 
     def __init__(self):
         print("Federated init")
@@ -51,6 +51,7 @@ class FederatedServer:
                 cls.aggregate(agg_alg)
                 logger.info("current epoch : {} / {}".format(cls.current_epoch, cls.max_epoch))
                 if cls.current_epoch == cls.max_epoch:
+                    logger.info("!!!!!!!!!!!!!!@#!@#!@#!@#!@#!@#")
                     cls.current_round += 1
 
     # Update statistical estimation
