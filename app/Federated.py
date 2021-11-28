@@ -39,8 +39,8 @@ class FederatedServer:
             cls.current_count = 0
 
             # Set Aggregation Algorithm
-            cls.aggregate(agg_alg)
             if agg_alg == "avg":
+                cls.aggregate(agg_alg)
                 cls.current_round += 1
                 logger.info("----------------------------------------")
                 logger.info("current round : {}".format(cls.current_round))
