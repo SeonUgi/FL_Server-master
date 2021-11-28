@@ -60,6 +60,13 @@ class FederatedServer:
                     logger.info("current round : {}".format(cls.current_round))
                     logger.info("----------------------------------------")
 
+            if agg_alg == "topk":
+                cls.aggregate(agg_alg)
+                cls.current_round += 1
+                logger.info("----------------------------------------")
+                logger.info("current round : {}".format(cls.current_round))
+                logger.info("----------------------------------------")
+
     # Update statistical estimation
     @classmethod
     def update_estimation(cls, local_estimations):
