@@ -16,7 +16,7 @@ class FederatedServer:
     est_count = 0
     current_round = 0
     current_epoch = 0
-    max_epoch = 2
+    max_epoch = 5
 
     def __init__(self):
         print("Federated init")
