@@ -52,6 +52,7 @@ class FederatedServer:
                 logger.info("current epoch : {} / {}".format(cls.current_epoch, cls.max_epoch))
                 if cls.current_epoch == cls.max_epoch:
                     cls.current_round += 1
+                    cls.current_epoch = 0
     # Update statistical estimation
     @classmethod
     def update_estimation(cls, local_estimations):
