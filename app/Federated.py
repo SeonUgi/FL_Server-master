@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class FederatedServer:
     
-    max_count = 6
+    max_count = 2
     global_weight = None
     local_weights = []
     local_accs = []
@@ -139,6 +139,7 @@ class FederatedServer:
 
         elif algorithm == 'topk':
             top = 3
+            print(cls.local_accs)
             temp = []
             for i in cls.local_accs:
                 temp = temp.append(float(i))
