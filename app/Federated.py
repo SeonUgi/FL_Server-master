@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class FederatedServer:
     
-    max_count = 2
+    max_count = 6
     global_weight = None
     local_weights = []
     local_accs = []
