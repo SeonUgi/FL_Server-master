@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class FederatedServer:
     
-    max_count = 2
+    max_count = 6
     global_weight = None
     local_weights = []
     local_accs = []
@@ -138,7 +138,7 @@ class FederatedServer:
             cls.local_weights = []  # global weight average 이후 다음 라운드를 위해 이전의 local weight 리스트 초기화
 
         elif algorithm == 'topk':
-            top = 2
+            top = 3
             print(cls.local_accs)
             temp = []
             for i in cls.local_accs:
