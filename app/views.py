@@ -56,7 +56,8 @@ def weight(request):
         # if FederatedServer.max_count == FederatedServer.current_count:
         local_weight = json_dic.get('local_weight')
         agg_alg = json_dic.get('agg_algorithm')
-        FederatedServer.update(local_weight, agg_alg)
+        acc = json_dic.get('acc')
+        FederatedServer.update(local_weight, agg_alg, acc)
         return HttpResponse("Request PUT OK", status.HTTP_200_OK)
 
     else:

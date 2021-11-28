@@ -1,6 +1,7 @@
 import copy
 
 import numpy as np
+import pandas as pd
 
 import logging
 logger = logging.getLogger(__name__)
@@ -10,6 +11,7 @@ class FederatedServer:
     max_count = 6
     global_weight = None
     local_weights = []
+    local_accs = []
     global_estimation = None
     local_estimations = []
     current_count = 0
@@ -23,7 +25,7 @@ class FederatedServer:
 
     #Update weights, round, client_count
     @classmethod
-    def update(cls, local_weight, agg_alg):
+    def update(cls, local_weight, agg_alg, acc):
 
         weight_list = []
         for i in range(len(local_weight)): #range(4):  #todo check layer 갯수
@@ -32,6 +34,7 @@ class FederatedServer:
 
         cls.current_count += 1
         cls.local_weights.append(weight_list)
+        cls.local_accs.append(acc)
 
         #print("update count : {}, {}".format(cls.current_count, len(cls.local_weights)))
 
@@ -118,9 +121,7 @@ class FederatedServer:
             cls.local_weights = []  # global weight average 이후 다음 라운드를 위해 이전의 local weight 리스트 초기화
 
         elif algorithm == "sgd":
-            # Fed SGD
 
-            # get sum of parameters
             for i in range(len(cls.local_weights)):
                 for j in range(len(cls.local_weights[i])):
                     temp = np.array(cls.local_weights[i][j])
@@ -128,6 +129,20 @@ class FederatedServer:
 
             cls.global_weight = np.divide(temp_list, cls.max_count)
             cls.local_weights = []  # global weight average 이후 다음 라운드를 위해 이전의 local weight 리스트 초기화
+
+        elif algorithm == 'topk':
+            top = 3
+            temp = pd.Series(cls.local_accs)
+            i = temp.nlargest(top)
+            index = i.index.values.tolist()
+            for i in index:
+                for j in range(len(cls.local_weights[i])):
+                    temp = np.array(cls.local_weights[i][j])
+                    temp_list[j] += temp
+
+            cls.global_weight = np.divide(temp_list, cls.max_count)
+            cls.local_weights = []
+            cls.local_accs = []
 
     @classmethod
     def get_weight(cls):
