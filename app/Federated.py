@@ -50,7 +50,7 @@ class FederatedServer:
                 cls.current_epoch += 1
                 cls.aggregate(agg_alg)
                 logger.info("current epoch : {} / {}".format(cls.current_epoch, cls.max_epoch))
-                if cls.current_epoch == cls.max_epoch:
+                if cls.current_epoch % 5 == cls.max_epoch:
                     logger.info("!!!!!!!!!!!!!!@#!@#!@#!@#!@#!@#")
                     cls.current_round += 1
 
