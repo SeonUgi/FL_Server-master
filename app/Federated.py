@@ -47,8 +47,8 @@ class FederatedServer:
                 logger.info("----------------------------------------")
 
             elif agg_alg == "sgd":
-                cls.current_epoch += 1
                 cls.aggregate(agg_alg)
+                cls.current_epoch += 1
                 logger.info("current epoch : {} / {}".format(cls.current_epoch, cls.max_epoch))
 
                 if cls.current_epoch % cls.max_epoch == 0:
